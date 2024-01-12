@@ -1,0 +1,78 @@
+﻿.hidden {
+    display: none;
+}
+
+.root {
+    width: 100%;
+    height: 100%;
+    font-family: Consolas;
+    background-size: cover;
+    background-image: url( "ui/menu/menu_background.png" );
+}
+
+*.ingame {
+    *.disableingame {
+        display: none;
+    }
+}
+
+*.notingame {
+    *.enableingame {
+        display: none;
+    }
+}
+
+.outerBorder {
+    border-width: 1px;
+    border-bottom-color: #34402C;
+    border-right-color: #34402C;
+    border-top-color: #707c68;
+    border-left-color: #707c68;
+}
+
+.innerBorder {
+    border-width: 1px;
+    border-bottom-color: #707c68;
+    border-right-color: #707c68;
+    border-top-color: #34402C;
+    border-left-color: #34402C;
+}
+
+.listContainer {
+    position: relative;
+    min-height: 100%;
+}
+
+.list {
+    position:absolute;
+    padding-left: 150px;
+    flex-direction: column;
+    gap: 10px;
+    bottom: 0;
+    left: 0;
+}
+
+.title {
+    color: red;
+    font-size: 40px;
+}
+
+.button {
+    color: white;
+    font-size: 22px;
+    &:hover {
+        cursor: pointer;
+        color: antiquewhite;
+    }
+}
+
+.mainButton {
+    color: #f4a600;
+    font-size: 26px;
+    padding-bottom: 30px;
+    &:hover {
+        cursor: pointer;
+        color: #fff732;
+        text-shadow: 1px 1px 1px #f4a600;
+    }
+}

@@ -1,0 +1,101 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using System;
+@using System.Collections.Generic;
+@inherits Panel
+@namespace Ricochet.Menu
+@attribute [StyleSheet]
+
+<root class="root">
+    <div class="createGameBox outerBorder">
+        <label class="popupText">Create Server</label>
+        <div class="inner outerBorder">
+			<div class="row">
+				<label>Map</label>
+				<DropDown class="innerBorder" Value:bind=@Map Options=@MapOptions></DropDown>
+			</div>
+			<div class="row">
+				<label>Round Type</label>
+				<DropDown class="innerBorder" Value:bind=@RoundType Options=@RoundTypeOptions></DropDown>
+			</div>
+			<div class="row">
+				<label>Hostname</label>
+				<TextEntry class="innerBorder" Value:bind="@Hostname"></TextEntry>
+			</div>
+			<div class ="row">
+				<label>Max Players</label>
+				<TextEntry class="innerBorder" Value:bind="@MaxPlayers" Numeric="@true"></TextEntry>
+			</div>
+			<div class ="row">
+				<label>Players Per Team</label>
+				<TextEntry class="innerBorder" Value:bind="@PlayersPerTeam" Numeric="@true"></TextEntry>
+			</div>
+			<div class ="row">
+				<label>Max Rounds</label>
+				<TextEntry class="innerBorder" Value:bind="@ArenaRounds" Numeric="@true"></TextEntry>
+			</div>
+			<div class="row">
+				<Checkbox LabelText="Allow VR Players" Value:bind="@AllowVR"></Checkbox>
+			</div>
+        </div>
+        <div class="buttonRow">
+            <button class="outerBorder" onclick="@Start">Start</button>
+            <button class="outerBorder" onclick="@Cancel">Cancel</button>
+        </div>
+    </div>
+</root>
+
+@code
+{
+	Random rand = new Random();
+	List<Option> MapOptions = new() {
+		new Option( "< Random Map >", "" ),
+		new Option( "rc_arena", "lambdagaming.rc_arena" ),
+		new Option( "rc_deathmatch", "lambdagaming.rc_deathmatch" ),
+		new Option( "rc_deathmatch2", "lambdagaming.rc_deathmatch_2" )
+	};
+	List<Option> RoundTypeOptions = new() {
+		new Option( "Deathmatch", 0 ),
+		new Option( "Team Deathmatch", 1 ),
+		new Option( "Arena", 2 )
+	};
+
+	public string Map { get; set; }
+	public string Hostname { get; set; }
+	public int MaxPlayers { get; set; }
+	public int RoundType { get; set; }
+	public int PlayersPerTeam { get; set; }
+	public int ArenaRounds { get; set; }
+	public bool AllowVR { get; set; }
+
+	public void Cancel() => this.Navigate( "/" );
+
+	public async void Start()
+	{
+		await Game.Menu.CreateLobbyAsync( MaxPlayers );
+
+		if ( string.IsNullOrWhiteSpace( Map ) )
+			Map = ( string ) MapOptions[rand.Next( 1, MapOptions.Count )].Value;
+
+		if ( string.IsNullOrWhiteSpace( Hostname ) )
+			Hostname = $"{Game.Menu.Lobby.Owner.Name}'s Ricochet server";
+
+		if ( RoundType < 0 || RoundType > 3 ) RoundType = 0;
+
+		if ( MaxPlayers <= 0 || MaxPlayers > 32 )
+			MaxPlayers = 32;
+		if ( RoundType == 2 && ( PlayersPerTeam <= 0 || PlayersPerTeam > 16 ) )
+			PlayersPerTeam = 16;
+		if ( RoundType == 2 && ArenaRounds <= 0  )
+			ArenaRounds = 3;
+
+		Game.Menu.Lobby.Title = Hostname;
+		Game.Menu.Lobby.Map = Map;
+		Game.Menu.Lobby.ConVars.Add( "rc_roundtype", RoundType.ToString() );
+		Game.Menu.Lobby.ConVars.Add( "rc_playersperteam", PlayersPerTeam.ToString() );
+		Game.Menu.Lobby.ConVars.Add( "rc_rounds", ArenaRounds.ToString() );
+		Game.Menu.Lobby.ConVars.Add( "rc_allowvr", AllowVR.ToString() );
+		_ = Game.Menu.Lobby.LaunchGameAsync();
+		Cancel();
+	}
+}

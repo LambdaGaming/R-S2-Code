@@ -1,0 +1,82 @@
+﻿@import "Menu.razor.scss";
+
+.createGameBox {
+    margin: auto;
+    width: 348px;
+    height: 460px;
+    background-color: #4C5844;
+    padding: 5px;
+    flex-direction: column;
+
+    .inner {
+        width: 95%;
+        height: 364px;
+        margin: auto;
+        padding-left: 14px;
+        padding-top: 10px;
+        padding-right: 8px;
+        overflow: scroll;
+        flex-direction: column;
+
+        .label {
+            font-size: 16px;
+        }
+
+        .row {
+            margin-bottom: 8px;
+        }
+    }
+
+    .button {
+        font-size: 14px;
+        width: 70px;
+        height: 22px;
+        margin-right: 10px;
+        padding-left: 4px;
+        padding-top: 2px;
+    }
+
+    .buttonRow {
+        flex-direction: row;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .dropdown {
+        padding: 0;
+        width: 172px;
+        background-color: #3e4637;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .textentry {
+        width: 120px;
+        background-color: #3e4637;
+        margin-left: auto;
+        margin-right: 0;
+        height: 20px;
+    }
+
+    .checkbox {
+        cursor: pointer;
+        
+        > .checkmark {
+            border: 1px solid #707c68;
+            margin-right: 5px;
+            color: transparent;
+            text-align: center;
+        }
+
+        &.checked {
+            > .checkmark {
+                color: white;
+            }
+        }
+    }
+}
+
+.popupText {
+    color: white;
+    font-size: 15px;
+}
